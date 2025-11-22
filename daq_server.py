@@ -932,13 +932,13 @@ def DAQ_process(ctr_Q:mp.Queue, cmd_Q:mp.Queue, data_Q:mp.Queue, msg_Q:mp.Queue,
         gvsi.write(cmd_trig)        # trigger continuous sampling of the selected channel names
         cont_read = True
         idx = 0
-        tstart_ns = time.clock_gettime_ns(time.CLOCK_REALTIME)
+        tstart_ns = time.perf_counter_ns()
         wdt_start = time.time()
         while True:
             try:
                 # read continuous samping response
                 fields = gvsi.read().split(',')
-                wavetime = (time.clock_gettime_ns(time.CLOCK_REALTIME) - tstart_ns) * 1e-9
+                wavetime = (time.perf_counter_ns() - tstart_ns) * 1e-9
                 record = (idx,wavetime) + tuple([conv_float(x.strip()) for x in fields])
                 idx += 1
                 data_Q.put(record)
@@ -950,7 +950,7 @@ def DAQ_process(ctr_Q:mp.Queue, cmd_Q:mp.Queue, data_Q:mp.Queue, msg_Q:mp.Queue,
                         resp_Q = pool_Q[cmd.resp_Qn]
                         if valid_cmd(cmdstr):
                             if any(x in cmdstr for x in(":CMD:TIME:RST",)):
-                                tstart_ns = time.clock_gettime_ns(time.CLOCK_REALTIME)
+                                tstart_ns = time.perf_counter_ns()
                                 response = f'{wavetime}'
                                 resp_Q.put(response)
                             else:

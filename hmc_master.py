@@ -40,6 +40,9 @@
 #
 ###################################################################################################
 
+#COMPORT = '/dev/cu.usbserial-MULTIPLEX_V01'
+COMPORT = 'COM6'
+
 from dataclasses import dataclass, field
 from overrides import override
 from argparse import Namespace
@@ -811,7 +814,7 @@ class AppException(Exception):
 
 class Hid:
     def __init__(self, vendor_id: int, product_id: int, quiet: bool = True):
-        self.hid = SerialCtrl('/dev/cu.usbserial-MULTIPLEX_V01', 9600)
+        self.hid = SerialCtrl(COMPORT, 9600)
         self.hid.OpenConnection()
         self.PositionAbs = 0
         self.quiet = quiet
