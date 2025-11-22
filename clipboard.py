@@ -2065,7 +2065,8 @@ def listen():
             if not l:
                 break
             print(f'{l}')
-            if any(x in l for x in("ERR", "OK")):
+            #if any(x in l for x in ("ERR", "OK")):
+            if "ERR" in l or "OK" in l:
                 break
     except Exception as e:
         print(f'Exception {e}.')
